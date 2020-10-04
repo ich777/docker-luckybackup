@@ -31,7 +31,6 @@ RUN mkdir $DATA_DIR && \
 
 ADD /scripts/ /opt/scripts/
 
-COPY /JD/* /tmp/
 RUN chmod -R 770 /opt/scripts/ && \
 	chown -R ${UID}:${GID} /mnt && \
 	chmod -R 770 /mnt
