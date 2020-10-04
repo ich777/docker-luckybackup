@@ -14,7 +14,6 @@ RUN export TZ=Europe/Rome && \
 	sed -i '/    document.title =/c\    document.title = "luckyBackup - noVNC";' /usr/share/novnc/app/ui.js && \
 	rm /usr/share/novnc/app/images/icons/*
 
-
 ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
 ENV CUSTOM_RES_H=768
