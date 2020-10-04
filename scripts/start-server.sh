@@ -1,8 +1,45 @@
 #!/bin/bash
 export DISPLAY=:99
+LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
+CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | rev | cut -d ' ' -f1 | rev)"
+if [ -z $LAT_V ]; then
+	if [ -z $CUR_V ]; then
+		echo "---Can't get latest version of luckyBackup, putting container into sleep mode!---"
+		sleep infinity
+	else
+		echo "---Can't get latest version of luckyBackup, falling back to v$CUR_V---"
+	fi
+fi
+
+echo "---Version Check---"
+if [ -z "$CUR_V" ]; then
+	echo "---luckyBackup not found, downloading and installing v$LAT_V...---"
+	cd ${DATA_DIR}
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
+		echo "---Successfully downloaded luckyBackup v$LAT_V---"
+	else
+		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
+		sleep infinity
+	fi
+	tar -C / --overwrite -xf ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz 2> /dev/null
+	rm ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz
+elif [ "$CUR_V" != "$LAT_V" ]; then
+	echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
+	cd ${DATA_DIR}
+	rm -R ${DATA_DIR}/luckybackup*
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
+		echo "---Successfully downloaded luckyBackup v$LAT_V---"
+	else
+		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
+		sleep infinity
+	fi
+	tar -C / --overwrite -xf ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz 2> /dev/null
+	rm ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz
+elif [ "$CUR_V" == "$LAT_V" ]; then
+	echo "---luckyBackup v$CUR_V up-to-date---"
+fi
 
 echo "---Preparing Server---"
-
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
@@ -25,7 +62,6 @@ find $DATA_DIR -name "x11vncLog.*" -exec rm -f {} \;
 echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
 screen -wipe 2&>/dev/null
-
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Starting Xvfb server---"
@@ -41,7 +77,6 @@ echo "---Starting noVNC server---"
 websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 8080 localhost:5900
 sleep 2
 
-sleep infinity
-
 echo "---Starting luckyBackup---"
 cd ${DATA_DIR}
+${DATA_DIR}/luckybackup
