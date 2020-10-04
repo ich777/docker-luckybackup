@@ -6,7 +6,7 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 rsync && \
+	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6  	libqt4-network rsync && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
