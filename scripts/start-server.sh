@@ -1,5 +1,6 @@
 #!/bin/bash
 export DISPLAY=:99
+ARCH="arm64"
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
 CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | rev | cut -d ' ' -f1 | rev)"
 if [ -z $LAT_V ]; then
@@ -15,7 +16,7 @@ echo "---Version Check---"
 if [ -z "$CUR_V" ]; then
 	echo "---luckyBackup not found, downloading and installing v$LAT_V...---"
 	cd ${DATA_DIR}
-	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}-${ARCH}.tar.gz" ; then
 		echo "---Successfully downloaded luckyBackup v$LAT_V---"
 	else
 		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
@@ -27,7 +28,7 @@ elif [ "$CUR_V" != "$LAT_V" ]; then
 	echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
 	cd ${DATA_DIR}
 	rm -R ${DATA_DIR}/luckybackup*
-	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}-${ARCH}.tar.gz" ; then
 		echo "---Successfully downloaded luckyBackup v$LAT_V---"
 	else
 		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
