@@ -40,6 +40,10 @@ elif [ "$CUR_V" == "$LAT_V" ]; then
 fi
 
 echo "---Preparing Server---"
+if [ ! -d ${DATA_DIR}/.config/crontabs ]; then
+	mkdir -p ${DATA_DIR}/.config/crontabs
+fi
+ln -s /luckybackup/.config/crontabs /var/spool/cron/crontabs 2>/dev/null
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
