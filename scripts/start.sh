@@ -17,7 +17,9 @@ fi
 
 echo "---Starting...---"
 chown -R ${UID}:${GID} /opt/scripts
+chown -R ${UID}:${GID} /var/spool/cron
 chown -R ${UID}:${GID} ${DATA_DIR}
+cron -- p
 
 term_handler() {
 	kill -SIGTERM "$killpid"
