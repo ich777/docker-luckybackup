@@ -16,9 +16,7 @@ else
 fi
 
 echo "---Starting...---"
-if [ ! -d ${DATA_DIR}/.config/crontabs ]; then
-	mkdir -p ${DATA_DIR}/.config/crontabs
-fi
+chown -R ${UID}:${GID} /opt/scripts
 chown -R ${UID}:${GID} ${DATA_DIR}
 
 term_handler() {
