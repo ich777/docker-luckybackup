@@ -27,7 +27,6 @@ RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
 	mkdir /etc/.fluxbox && \
-	rm -R /var/spool/cron/crontabs/ && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
