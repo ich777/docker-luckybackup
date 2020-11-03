@@ -16,8 +16,6 @@ else
 fi
 
 echo "---Starting...---"
-chown -R ${UID}:${GID} /opt/scripts
-chown -R ${UID}:${GID} /var/spool/cron
 if [ ! -d ${DATA_DIR}/.config/crontabs ]; then
 	mkdir -p ${DATA_DIR}/.config/crontabs
 fi
