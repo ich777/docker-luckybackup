@@ -88,6 +88,8 @@ echo "---Checking for old display lock files---"
 find /tmp -name ".X0*" -exec rm -f {} \; > /dev/null 2>&1
 screen -wipe 2&>/dev/null
 chmod -R ${DATA_PERM} ${DATA_DIR}
+chmod 700 ${DATA_DIR}/.ssh
+chmod 600 ${DATA_DIR}/.ssh/*
 
 echo "---Starting Xvfb server---"
 screen -S Xvfb -L -Logfile ${DATA_DIR}/XvfbLog.0 -d -m /opt/scripts/start-Xvfb.sh
