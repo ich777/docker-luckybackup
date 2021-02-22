@@ -41,6 +41,31 @@ elif [ "$CUR_V" == "$LAT_V" ]; then
 fi
 
 echo "---Preparing Server---"
+if [ ! -d ${DATA_DIR}/.ssh ]; then
+    mkdir -p ${DATA_DIR}/.ssh
+fi
+if [ ! -f ${DATA_DIR}/.ssh/ssh_host_rsa_key ]; then
+    echo "---No ssh_host_rsa_key found, generating!---"
+    ssh-keygen -f ${DATA_DIR}/.ssh/ssh_host_rsa_key -t rsa -b 4096 -N ""
+else
+    echo "---ssh_host_rsa_key keys found!---"
+fi
+if [ ! -f ${DATA_DIR}/.ssh/ssh_host_ecdsa_key ]; then
+    echo "---No ssh_host_ecdsa_key found, generating!---"
+    ssh-keygen -f ${DATA_DIR}/.ssh/ssh_host_ecdsa_key -t ecdsa -b 521 -N ""
+else
+    echo "---ssh_host_ecdsa_key found!---"
+fi
+if [ ! -f ${DATA_DIR}/.ssh/ssh_host_ed25519_key ]; then
+    echo "---No ssh_host_ed25519_key found, generating!---"
+    ssh-keygen -f ${DATA_DIR}/.ssh/ssh_host_ed25519_key -t ed25519 -N ""
+else
+    echo "---ssh_host_ed25519_key found!---"
+fi
+echo "---Starting ssh daemon---"
+/usr/sbin/sshd
+sleep 2
+
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
@@ -64,6 +89,8 @@ echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
 screen -wipe 2&>/dev/null
 chmod -R ${DATA_PERM} ${DATA_DIR}
+chmod 700 ${DATA_DIR}/.ssh
+chmod 600 ${DATA_DIR}/.ssh/*
 
 echo "---Starting Xvfb server---"
 screen -S Xvfb -L -Logfile ${DATA_DIR}/XvfbLog.0 -d -m /opt/scripts/start-Xvfb.sh
