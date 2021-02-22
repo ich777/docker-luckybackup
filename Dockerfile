@@ -6,13 +6,21 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 libqt4-network rsync cron && \
+	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 libqt4-network rsync cron ssh ssh-askpass && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i '/    document.title =/c\    document.title = "luckyBackup - noVNC";' /usr/share/novnc/app/ui.js && \
 	rm /usr/share/novnc/app/images/icons/*
+
+RUN mkdir -p /run/sshd && \
+	rm -v /etc/ssh/ssh_host_* && \
+	sed -i "/#Port 8022/c\Port 8022" /etc/ssh/sshd_config && \
+	sed -i "/#ListenAddress 0.0.0.0/c\ListenAddress 0.0.0.0" /etc/ssh/sshd_config && \
+	sed -i "/#HostKey \/etc\/ssh\/ssh_host_rsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_rsa_key" /etc/ssh/sshd_config && \
+	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ecdsa_key" /etc/ssh/sshd_config && \
+	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ed25519_key" /etc/ssh/sshd_config
 
 ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
