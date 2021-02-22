@@ -15,12 +15,17 @@ else
 	echo "---No optional script found, continuing---"
 fi
 
+echo "---Checking configuration for noVNC---"
+novnccheck
+
 echo "---Starting...---"
 chown -R ${UID}:${GID} /opt/scripts
+chown -R ${UID}:${GID} /var/spool/cron
 if [ ! -d ${DATA_DIR}/.config/crontabs ]; then
 	mkdir -p ${DATA_DIR}/.config/crontabs
 fi
 ln -s /luckybackup/.config/crontabs /var/spool/cron/crontabs 2>/dev/null
+ln -s /luckybackup/luckybackup /usr/bin/luckybackup 2>/dev/null
 chown -R ${UID}:${GID} ${DATA_DIR}
 cron -- p
 
