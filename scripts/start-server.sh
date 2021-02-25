@@ -2,7 +2,7 @@
 export DISPLAY=:0
 ARCH="arm64"
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
-CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | rev | cut -d ' ' -f1 | rev)"
+CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | cut -d ':' -f2 | xargs)"
 if [ -z $LAT_V ]; then
 	if [ -z $CUR_V ]; then
 		echo "---Can't get latest version of luckyBackup, putting container into sleep mode!---"
