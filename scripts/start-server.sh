@@ -1,5 +1,10 @@
 #!/bin/bash
 export DISPLAY=:0
+
+echo "---Starting Xvfb server---"
+screen -S Xvfb -L -Logfile ${DATA_DIR}/XvfbLog.0 -d -m /opt/scripts/start-Xvfb.sh
+sleep 2
+
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
 CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | rev | cut -d ' ' -f1 | rev)"
 if [ -z $LAT_V ]; then
@@ -91,9 +96,6 @@ chmod -R ${DATA_PERM} ${DATA_DIR}
 chmod 700 ${DATA_DIR}/.ssh
 chmod 600 ${DATA_DIR}/.ssh/*
 
-echo "---Starting Xvfb server---"
-screen -S Xvfb -L -Logfile ${DATA_DIR}/XvfbLog.0 -d -m /opt/scripts/start-Xvfb.sh
-sleep 2
 echo "---Starting x11vnc server---"
 screen -S x11vnc -L -Logfile ${DATA_DIR}/x11vncLog.0 -d -m /opt/scripts/start-x11.sh
 sleep 2
