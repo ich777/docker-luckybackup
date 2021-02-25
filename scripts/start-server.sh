@@ -13,6 +13,7 @@ if [ -z $LAT_V ]; then
 		sleep infinity
 	else
 		echo "---Can't get latest version of luckyBackup, falling back to v$CUR_V---"
+		LAT_V="${CUR_V}"
 	fi
 fi
 
