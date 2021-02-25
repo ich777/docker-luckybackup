@@ -1,5 +1,5 @@
 #!/bin/bash
-export DISPLAY=:99
+export DISPLAY=:0
 ARCH="armv7"
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
 CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | rev | cut -d ' ' -f1 | rev)"
