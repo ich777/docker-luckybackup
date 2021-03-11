@@ -48,7 +48,10 @@ ADD /scripts/ /opt/scripts/
 COPY /conf/ /etc/.fluxbox/
 RUN chmod -R 770 /opt/scripts/ && \
 	chown -R ${UID}:${GID} /mnt && \
-	chmod -R 770 /mnt 
+	chown -R root:$GID /usr/share && \
+	chmod -R 775 /usr/share && \
+	chmod -R 770 /mnt
+
 
 EXPOSE 8080
 
