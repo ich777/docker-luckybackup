@@ -42,9 +42,9 @@ ADD /scripts/ /opt/scripts/
 #COPY /icons/* /usr/share/novnc/app/images/icons/
 COPY /conf/ /etc/.fluxbox/
 RUN chmod -R 770 /opt/scripts/ && \
-	chown -R ${UID}:${GID} /mnt && \
 	chown -R root:$GID /usr/share && \
 	chmod -R 775 /usr/share && \
+	chown -R ${UID}:${GID} /mnt && \
 	chmod -R 770 /mnt
 
 EXPOSE 8080
