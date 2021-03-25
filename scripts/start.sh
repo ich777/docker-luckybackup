@@ -36,7 +36,12 @@ term_handler() {
 }
 
 trap 'kill ${!}; term_handler' SIGTERM
-su ${USER} -c "/opt/scripts/start-server.sh" &
+if [ "${ROOT}" != "true" ]; then
+	su ${USER} -c "/opt/scripts/start-server.sh" &
+else
+	ln -s ${DATA_DIR}/* /root/
+	/opt/scripts/start-server.sh &
+fi
 killpid="$!"
 while true
 do
