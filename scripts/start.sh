@@ -39,7 +39,13 @@ trap 'kill ${!}; term_handler' SIGTERM
 if [ "${ROOT}" != "true" ]; then
 	su ${USER} -c "/opt/scripts/start-server.sh" &
 else
-	ln -s /root/ ${DATA_DIR}/*
+	if [ ! -d /root/.luckyBackup ]; then
+		mkdir -p /root/.luckyBackup
+	else
+		rm -rf /root/.luckyBackup
+		mkdir -p /root/.luckyBackup
+	fi
+	ln -s ${DATA_DIR}/.luckyBackup/* /root/.luckyBackup/
 	/opt/scripts/start-server.sh &
 fi
 killpid="$!"
