@@ -67,7 +67,8 @@ if [ ! -f ${DATA_DIR}/.ssh/ssh_host_ed25519_key ]; then
 else
     echo "---ssh_host_ed25519_key found!---"
 fi
-sed -i "/LuckyBackupDir=/c\LuckyBackupDir=${DATA_DIR}/.luckyBackup" ${DATA_DIR}/.luckyBackup/profiles/*.profile
+sed -i "/LuckyBackupDir=/c\LuckyBackupDir=${DATA_DIR}/.luckyBackup" ${DATA_DIR}/.luckyBackup/profiles/*.profile 2>/dev/null
+sed -i "/Default_Profile=/c\Default_Profile=${DATA_DIR}/.luckyBackup/profiles/default.profile" ${DATA_DIR}/.luckyBackup/settings.ini 2>/dev/null
 echo "---Starting ssh daemon---"
 /usr/sbin/sshd
 sleep 2
