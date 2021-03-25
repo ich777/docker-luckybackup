@@ -39,6 +39,9 @@ trap 'kill ${!}; term_handler' SIGTERM
 if [ "${ROOT}" != "true" ]; then
 	su ${USER} -c "/opt/scripts/start-server.sh" &
 else
+	if [ ! -d ${DATA_DIR}/.luckyBackup ]; then
+		mkdir -p ${DATA_DIR}/.luckyBackup
+	fi
 	if [ ! -d /root/.luckyBackup ]; then
 		mkdir -p /root/.luckyBackup
 	else
