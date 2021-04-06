@@ -2,7 +2,6 @@
 export DISPLAY=:0
 export XAUTHORITY=${DATA_DIR}/.Xauthority
 
-echo "---Starting Xvfb server---"
 Xvfb :0 -screen scrn 800x600x16 2>/dev/null &
 
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
@@ -17,8 +16,7 @@ if [ -z $LAT_V ]; then
 	fi
 fi
 
-echo "---Killing Xvfb server---"
-kill SIGTERM "$(pidof Xvfb)"
+kill -SIGTERM $(pidof Xvfb)
 
 echo "---Version Check---"
 if [ -z "$CUR_V" ]; then
