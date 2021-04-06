@@ -1,9 +1,9 @@
 #!/bin/bash
 export DISPLAY=:0
+export XAUTHORITY=${DATA_DIR}/.Xauthority
 
 echo "---Starting Xvfb server---"
-screen -S Xvfb -L -Logfile ${DATA_DIR}/XvfbLog.0 -d -m /opt/scripts/start-Xvfb.sh
-sleep 2
+Xvfb :0 -screen scrn 800x600x16 2>/dev/null &
 
 LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
 CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | cut -d ':' -f2 | xargs)"
@@ -16,6 +16,9 @@ if [ -z $LAT_V ]; then
 		LAT_V="${CUR_V}"
 	fi
 fi
+
+echo "---Killing Xvfb server---"
+kill SIGTERM "$(pidof Xvfb)"
 
 echo "---Version Check---"
 if [ -z "$CUR_V" ]; then
@@ -90,17 +93,19 @@ if [ "${CUSTOM_RES_H}" -le 767 ]; then
     CUSTOM_RES_H=768
 fi
 echo "---Checking for old logfiles---"
-find $DATA_DIR -name "XvfbLog.*" -exec rm -f {} \;
-find $DATA_DIR -name "x11vncLog.*" -exec rm -f {} \;
-echo "---Checking for old display lock files---"
-find /tmp -name ".X0*" -exec rm -f {} \; > /dev/null 2>&1
-screen -wipe 2&>/dev/null
+rm -rf /tmp/.X0*
+rm -rf /tmp/.X11*
+rm -rf ${DATA_DIR}/.vnc/*.log ${DATA_DIR}/.vnc/*.pid
 chmod -R ${DATA_PERM} ${DATA_DIR}
+if [ -f ${DATA_DIR}/.vnc/passwd ]; then
+	chmod 600 ${DATA_DIR}/.vnc/passwd
+fi
+screen -wipe 2&>/dev/null
 chmod 700 ${DATA_DIR}/.ssh
 chmod 600 ${DATA_DIR}/.ssh/*
 
-echo "---Starting x11vnc server---"
-screen -S x11vnc -L -Logfile ${DATA_DIR}/x11vncLog.0 -d -m /opt/scripts/start-x11.sh
+echo "---Starting TurboVNC server---"
+vncserver -geometry ${CUSTOM_RES_W}x${CUSTOM_RES_H} -depth ${CUSTOM_DEPTH} :0 -rfbport ${RFB_PORT} -noxstartup ${TURBOVNC_PARAMS} 2>/dev/null
 sleep 2
 echo "---Starting Fluxbox---"
 screen -d -m env HOME=/etc /usr/bin/fluxbox
