@@ -1,4 +1,4 @@
-until cron --p ; do
+until cron -- p ; do
 	echo "cron crashed with exit code $?.  Respawning.." >&2
     if [ -f /var/run/crond.pid ]; then
         rm -rf /var/run/crond.pid
