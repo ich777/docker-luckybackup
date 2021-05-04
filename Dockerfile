@@ -24,9 +24,9 @@ RUN mkdir -p /run/sshd && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ecdsa_key" /etc/ssh/sshd_config && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ed25519_key" /etc/ssh/sshd_config
 
-COPY /cronie.tar.gz /tmp/cronie.tar.gz
-RUN tar -C / -xvf /tmp/cronie.tar.gz && \
-	rm -rf /tmp/cronie.tar.gz
+COPY /mcron.tar.gz /tmp/mcron.tar.gz
+RUN tar -C / -xvf /tmp/mcron.tar.gz && \
+	rm -rf /tmp/mcron.tar.gz
 
 ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
