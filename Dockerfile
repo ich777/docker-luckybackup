@@ -7,7 +7,7 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 libqt4-network cron ssh ssh-askpass sendemail && \
+	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 libqt4-network ssh ssh-askpass sendemail && \
 	apt-get -y -t testing install rsync && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
@@ -23,6 +23,10 @@ RUN mkdir -p /run/sshd && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_rsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_rsa_key" /etc/ssh/sshd_config && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ecdsa_key" /etc/ssh/sshd_config && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ed25519_key" /etc/ssh/sshd_config
+
+COPY /cronie.tar.gz /tmp/cronie.tar.gz
+RUN tar -C / -xvf /tmp/cronie.tar.gz && \
+	rm -rf /tmp/cronie.tar.gz
 
 ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
@@ -41,7 +45,6 @@ RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
 	mkdir /etc/.fluxbox && \
-	rm -R /var/spool/cron/crontabs/ && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
