@@ -101,6 +101,9 @@ fi
 screen -wipe 2&>/dev/null
 chmod 700 ${DATA_DIR}/.ssh
 chmod 600 ${DATA_DIR}/.ssh/*
+if [ ! -d ${DATA_DIR}/.cron ]; then
+	mkdir -p ${DATA_DIR}/.cron
+fi
 
 echo "---Starting TurboVNC server---"
 vncserver -geometry ${CUSTOM_RES_W}x${CUSTOM_RES_H} -depth ${CUSTOM_DEPTH} :0 -rfbport ${RFB_PORT} -noxstartup ${TURBOVNC_PARAMS} 2>/dev/null
