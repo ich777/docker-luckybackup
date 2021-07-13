@@ -2,50 +2,6 @@
 export DISPLAY=:0
 export XAUTHORITY=${DATA_DIR}/.Xauthority
 
-Xvfb :0 -screen scrn 800x600x16 2>/dev/null &
-
-LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/luckyBackup | grep FORK | cut -d '=' -f2)"
-CUR_V="$(${DATA_DIR}/luckybackup --version 2> /dev/null | grep "version:" | cut -d ':' -f2 | xargs)"
-if [ -z $LAT_V ]; then
-	if [ -z $CUR_V ]; then
-		echo "---Can't get latest version of luckyBackup, putting container into sleep mode!---"
-		sleep infinity
-	else
-		echo "---Can't get latest version of luckyBackup, falling back to v$CUR_V---"
-		LAT_V="${CUR_V}"
-	fi
-fi
-
-kill -SIGTERM $(pidof Xvfb)
-
-echo "---Version Check---"
-if [ -z "$CUR_V" ]; then
-	echo "---luckyBackup not found, downloading and installing v$LAT_V...---"
-	cd ${DATA_DIR}
-	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
-		echo "---Successfully downloaded luckyBackup v$LAT_V---"
-	else
-		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
-		sleep infinity
-	fi
-	tar -C / --overwrite -xf ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz 2> /dev/null
-	rm ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz
-elif [ "$CUR_V" != "$LAT_V" ]; then
-	echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
-	cd ${DATA_DIR}
-	rm -R ${DATA_DIR}/luckybackup*
-	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz "https://github.com/ich777/luckyBackup/releases/download/$LAT_V/luckyBackup-v${LAT_V}.tar.gz" ; then
-		echo "---Successfully downloaded luckyBackup v$LAT_V---"
-	else
-		echo "---Something went wrong, can't download luckyBackup v$LAT_V, putting container into sleep mode!---"
-		sleep infinity
-	fi
-	tar -C / --overwrite -xf ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz 2> /dev/null
-	rm ${DATA_DIR}/luckyBackup-v$LAT_V.tar.gz
-elif [ "$CUR_V" == "$LAT_V" ]; then
-	echo "---luckyBackup v$CUR_V up-to-date---"
-fi
-
 echo "---Preparing Server---"
 if [ ! -d ${DATA_DIR}/.ssh ]; then
     mkdir -p ${DATA_DIR}/.ssh
@@ -68,8 +24,6 @@ if [ ! -f ${DATA_DIR}/.ssh/ssh_host_ed25519_key ]; then
 else
     echo "---ssh_host_ed25519_key found!---"
 fi
-sed -i "/LuckyBackupDir=/c\LuckyBackupDir=${DATA_DIR}/.luckyBackup" ${DATA_DIR}/.luckyBackup/profiles/*.profile 2>/dev/null
-sed -i "/Default_Profile=/c\Default_Profile=${DATA_DIR}/.luckyBackup/profiles/default.profile" ${DATA_DIR}/.luckyBackup/settings.ini 2>/dev/null
 echo "---Starting ssh daemon---"
 /usr/sbin/sshd
 sleep 2
@@ -127,4 +81,4 @@ sleep 2
 
 echo "---Starting luckyBackup---"
 cd ${DATA_DIR}
-${DATA_DIR}/luckybackup
+/usr/bin/luckybackup
