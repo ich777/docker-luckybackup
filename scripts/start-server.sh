@@ -1,6 +1,7 @@
 #!/bin/bash
 export DISPLAY=:0
 export XAUTHORITY=${DATA_DIR}/.Xauthority
+export XDG_RUNTIME_DIR=/tmp/runtime-luckybackup
 
 echo "---Preparing Server---"
 if [ ! -d ${DATA_DIR}/.ssh ]; then
