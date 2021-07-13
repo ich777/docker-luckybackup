@@ -104,6 +104,13 @@ chmod 600 ${DATA_DIR}/.ssh/*
 if [ ! -d ${DATA_DIR}/.cron ]; then
 	mkdir -p ${DATA_DIR}/.cron
 fi
+if [ ! "$(crontab -l)" ]; then
+  if [ -f ${DATA_DIR}/.luckyBackup/schedule/luckyCron.txt ]; then
+    crontab -e /tmp/cron
+  else
+    crontab -e ${DATA_DIR}/.luckyBackup/schedule/luckyCron.txt
+  fi
+fi
 
 echo "---Starting TurboVNC server---"
 vncserver -geometry ${CUSTOM_RES_W}x${CUSTOM_RES_H} -depth ${CUSTOM_DEPTH} :0 -rfbport ${RFB_PORT} -noxstartup ${TURBOVNC_PARAMS} 2>/dev/null
