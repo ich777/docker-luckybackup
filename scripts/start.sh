@@ -21,37 +21,10 @@ novnccheck
 echo "---Starting...---"
 chown -R root:${GID} /opt/scripts
 chmod -R 750 /opt/scripts
-chown -R ${UID}:${GID} /var/spool/cron
-if [ ! -d ${DATA_DIR}/.config/crontabs ]; then
-	mkdir -p ${DATA_DIR}/.config/crontabs
-fi
+chown -R ${UID}:${GID} ${DATA_DIR}
 if [ -f /var/run/crond.pid ]; then
 	rm -rf /var/run/crond.pid
 fi
-if [ "${ROOT}" != "true" ]; then
-	if [ -f ${DATA_DIR}/.cron/luckybackup ]; then
-		if [ ! -d /var/spool/cron/crontab ]; then
-			mkdir -p /var/spool/cron/crontab
-		fi
-		cp ${DATA_DIR}/.cron/luckybackup /var/spool/cron/crontabs/luckybackup
-		chmod 600 /var/spool/cron/crontabs/luckybackup
-		chown ${UID}:crontab /var/spool/cron/crontabs/luckybackup
-	fi
-else
-	if [ -f ${DATA_DIR}/.cron/luckybackup ]; then
-		if [ ! -d /var/spool/cron/crontab ]; then
-			mkdir -p /var/spool/cron/crontab
-		fi
-		cp ${DATA_DIR}/.cron/luckybackup /var/spool/cron/crontabs/root
-		chmod 600 /var/spool/cron/crontabs/root
-		chown ${UID}:crontab /var/spool/cron/crontabs/root
-	fi
-fi
-ln /luckybackup/.config/crontabs/luckybackup /var/spool/cron/crontabs/luckybackup 2>/dev/null
-chown -R ${UID}:${GID} ${DATA_DIR}
-echo "---Starting cron---"
-/opt/scripts/start-cron.sh &
-/opt/scripts/start-cronwatchdog.sh &
 
 term_handler() {
 	kill -SIGTERM "$killpid"
