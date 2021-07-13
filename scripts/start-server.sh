@@ -105,7 +105,7 @@ if [ ! -d ${DATA_DIR}/.cron ]; then
 	mkdir -p ${DATA_DIR}/.cron
 fi
 if [ ! "$(crontab -l 2>/dev/null)" ]; then
-  if [ -f ${DATA_DIR}/.luckyBackup/schedule/luckyCron.txt ]; then
+  if [ ! -f ${DATA_DIR}/.luckyBackup/schedule/luckyCron.txt ]; then
     crontab /tmp/cron
   else
     crontab -e ${DATA_DIR}/.luckyBackup/schedule/luckyCron.txt
