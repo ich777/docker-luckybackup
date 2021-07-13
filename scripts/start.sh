@@ -18,6 +18,9 @@ fi
 echo "---Checking configuration for noVNC---"
 novnccheck
 
+echo "---Starting cron---"
+cron -- p
+
 echo "---Starting...---"
 chown -R root:${GID} /opt/scripts
 chmod -R 750 /opt/scripts
