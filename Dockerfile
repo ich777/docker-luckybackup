@@ -12,6 +12,8 @@ RUN export TZ=Europe/Rome && \
 	locale-gen && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i '/    document.title =/c\    document.title = "luckyBackup - noVNC";' /usr/share/novnc/app/ui.js && \
+	wget -q -O /tmp/luckybackup.tar.gz "$(curl -s "https://sourceforge.net/projects/luckybackup/best_release.json" | jq -r '.platform_releases.linux.url')" && \
+	tar -C / --strip-components=1 -xf /tmp/luckybackup.tar.gz && \
 	rm /usr/share/novnc/app/images/icons/*
 
 RUN mkdir -p /run/sshd && \
