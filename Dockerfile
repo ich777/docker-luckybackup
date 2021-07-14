@@ -1,19 +1,20 @@
-FROM ich777/novnc-baseimage
+FROM ich777/novnc-baseimage:bullseye
 
 LABEL maintainer="admin@minenet.at"
 
 RUN export TZ=Europe/Rome && \
-	echo "deb http://ftp.de.debian.org/debian/ testing main contrib non-free" >> /etc/apt/sources.list && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends fonts-takao libqtcore4 libqtgui4 libc6 libgcc1 libstdc++6 libqt4-network cron ssh ssh-askpass sendemail && \
-	apt-get -y -t testing install rsync && \
+	apt-get -y install --no-install-recommends fonts-takao libqt5core5a qtscript5-dev libc6 libgcc1 libstdc++6 libqt5network5 rsync cron ssh ssh-askpass sendemail jq && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i '/    document.title =/c\    document.title = "luckyBackup - noVNC";' /usr/share/novnc/app/ui.js && \
+	wget -q -O /tmp/luckybackup.tar.gz https://github.com/ich777/luckyBackup/releases/download/0.5.0/luckyBackup-v0.5.0.tar.gz && \
+	tar -C / -xf /tmp/luckybackup.tar.gz && \
+	rm -rf /tmp/luckybackup.tar.gz && \
 	rm /usr/share/novnc/app/images/icons/*
 
 RUN mkdir -p /run/sshd && \
@@ -28,6 +29,7 @@ ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
 ENV CUSTOM_RES_H=768
 ENV CUSTOM_DEPTH=16
+ENV CRON_WATCHDOG=60
 ENV NOVNC_PORT=8080
 ENV RFB_PORT=5900
 ENV TURBOVNC_PARAMS="-securitytypes none" 
@@ -41,12 +43,12 @@ RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
 	mkdir /etc/.fluxbox && \
-	rm -R /var/spool/cron/crontabs/ && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
 #COPY /icons/* /usr/share/novnc/app/images/icons/
 COPY /conf/ /etc/.fluxbox/
+COPY /cron /tmp/
 RUN chmod -R 770 /opt/scripts/ && \
 	chown -R root:$GID /usr/share && \
 	chmod -R 775 /usr/share && \
