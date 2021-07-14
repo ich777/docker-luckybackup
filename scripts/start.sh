@@ -19,6 +19,7 @@ echo "---Checking configuration for noVNC---"
 novnccheck
 
 echo "---Starting cron---"
+export PATH=/bin:/usr/bin:${DATA_DIR}
 cron -- p
 
 echo "---Starting...---"
