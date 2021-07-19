@@ -19,8 +19,8 @@ echo "---Checking configuration for noVNC---"
 novnccheck
 
 echo "---Starting cron---"
-export PATH=/bin:/usr/bin:${DATA_DIR}
-cron -- p
+export PATH=/bin:/usr/bin:${DATA_DIR}:$PATH
+/usr/sbin/cron -- p
 
 echo "---Starting...---"
 chown -R root:${GID} /opt/scripts
