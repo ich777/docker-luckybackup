@@ -41,7 +41,7 @@ if [ "${ROOT}" != "true" ]; then
 	su ${USER} -c "/opt/scripts/start-server.sh" &
 else
 	if [ ! -d ${DATA_DIR}/.luckyBackup ]; then
-		su ${USER} -c "/opt/scripts/init-root.sh" &
+		su ${USER} -c "/opt/scripts/init-root.sh"
 		exit 0
 	fi
 	if [ ! -d /root/.luckyBackup ]; then
