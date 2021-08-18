@@ -18,8 +18,6 @@ vncserver -geometry ${CUSTOM_RES_W}x${CUSTOM_RES_H} -depth ${CUSTOM_DEPTH} :0 -r
 sleep 2
 screen -d -m env HOME=/etc /usr/bin/fluxbox
 sleep 2
-#websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem ${NOVNC_PORT} localhost:${RFB_PORT}
-#sleep 2
 
 cd ${DATA_DIR}
 timeout 5 /usr/bin/luckybackup
