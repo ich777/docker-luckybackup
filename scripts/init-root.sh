@@ -25,5 +25,6 @@ websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 9999 localhost:9
 cd ${DATA_DIR}
 timeout 5 /usr/bin/luckybackup
 
-echo "----Initialisation complete please restart the container-----"
-echo "---if you don't started it with '--restart=unless-stopped'---"
+echo "-----Initialisation complete please restart the container-----"
+echo "---please restart the container if it doesn't auto restart!---"
+echo
