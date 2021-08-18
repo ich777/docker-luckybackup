@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "---Initializing server, please wait...---"
+#!/bin/bash
 export DISPLAY=:0
 export XAUTHORITY=${DATA_DIR}/.Xauthority
 export XDG_RUNTIME_DIR=/tmp/runtime-luckybackup
@@ -12,10 +13,15 @@ if [ -f ${DATA_DIR}/.vnc/passwd ]; then
 	chmod 600 ${DATA_DIR}/.vnc/passwd
 fi
 screen -wipe 2&>/dev/null
+chmod 700 ${DATA_DIR}/.ssh
+chmod 600 ${DATA_DIR}/.ssh/*
 
-vncserver -geometry 1024x768 -depth 16 :0 -rfbport ${RFB_PORT} -noxstartup 2>/dev/null
+vncserver -geometry ${CUSTOM_RES_W}x${CUSTOM_RES_H} -depth ${CUSTOM_DEPTH} :0 -rfbport ${RFB_PORT} -noxstartup ${TURBOVNC_PARAMS} 2>/dev/null
 sleep 2
 screen -d -m env HOME=/etc /usr/bin/fluxbox
+sleep 2
+websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem ${NOVNC_PORT} localhost:${RFB_PORT}
+sleep 2
 
 cd ${DATA_DIR}
 timeout 5 /usr/bin/luckybackup
