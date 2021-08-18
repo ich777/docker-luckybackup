@@ -38,6 +38,9 @@ term_handler() {
 
 trap 'kill ${!}; term_handler' SIGTERM
 if [ "${ROOT}" != "true" ]; then
+	if [ -d /tmp/runtime-luckybackup ]; then
+	  chown -R ${UID}:${GID} /tmp/runtime-luckybackup
+	fi
 	su ${USER} -c "/opt/scripts/start-server.sh" &
 else
 	if [ ! -d ${DATA_DIR}/.luckyBackup ]; then
@@ -49,6 +52,9 @@ else
 	else
 		rm -rf /root/.luckyBackup
 		mkdir -p /root/.luckyBackup
+	fi
+	if [ -d /tmp/runtime-luckybackup ]; then
+	  chown -R root:root /tmp/runtime-luckybackup
 	fi
 	ln -s ${DATA_DIR}/.luckyBackup/* /root/.luckyBackup/
 	/opt/scripts/start-server.sh &
