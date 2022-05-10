@@ -61,6 +61,10 @@ else
 	if [ -d /tmp/runtime-luckybackup ]; then
 	  chown -R root:root /tmp/runtime-luckybackup
 	fi
+	if [ -f ${DATA_DIR}/.vnc/passwd ]; then
+		mkdir -p /root/.vnc 2 >/dev/null
+		cp ${DATA_DIR}/.vnc/passwd /root/.vnc/passwd
+	fi
 	ln -s ${DATA_DIR}/.luckyBackup/* /root/.luckyBackup/
 	/opt/scripts/start-server.sh &
 fi
