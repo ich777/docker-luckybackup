@@ -24,7 +24,9 @@ RUN mkdir -p /run/sshd && \
 	sed -i "/#ListenAddress 0.0.0.0/c\ListenAddress 0.0.0.0" /etc/ssh/sshd_config && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_rsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_rsa_key" /etc/ssh/sshd_config && \
 	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ecdsa_key" /etc/ssh/sshd_config && \
-	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ed25519_key" /etc/ssh/sshd_config
+	sed -i "/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/c\HostKey \/luckybackup\/.ssh\/ssh_host_ed25519_key" /etc/ssh/sshd_config && \
+	sed -i "/HashKnownHosts yes/c\    HashKnownHosts no" /etc/ssh/ssh_config && \
+	sed -i "/StrictHostKeyChecking ask/c\    StrictHostKeyChecking no" /etc/ssh/ssh_config
 
 ENV DATA_DIR=/luckybackup
 ENV CUSTOM_RES_W=1024
