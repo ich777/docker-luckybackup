@@ -7,7 +7,7 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends libqt5core5a qtscript5-dev libc6 libgcc1 libstdc++6 libqt5network5 rsync cron ssh ssh-askpass sendemail jq libnet-ssleay-perl libio-socket-ssl-perl ttf-wqy-zenhei fonts-wqy-microhei fonts-takao fonts-arphic-uming fonts-noto-cjk && \
+	apt-get -y install --no-install-recommends curl libqt5core5a qtscript5-dev libc6 libgcc1 libstdc++6 libqt5network5 rsync cron ssh ssh-askpass sendemail jq libnet-ssleay-perl libio-socket-ssl-perl ttf-wqy-zenhei fonts-wqy-microhei fonts-takao fonts-arphic-uming fonts-noto-cjk && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
