@@ -1,4 +1,4 @@
-FROM ich777/novnc-baseimage:bullseye_amd64
+FROM ich777/novnc-baseimage
 
 LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-luckybackup"
@@ -7,7 +7,7 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends curl libqt5core5a qtscript5-dev libc6 libgcc1 libstdc++6 libqt5network5 rsync cron ssh ssh-askpass sendemail jq libnet-ssleay-perl libio-socket-ssl-perl ttf-wqy-zenhei fonts-wqy-microhei fonts-takao fonts-arphic-uming fonts-noto-cjk && \
+	apt-get -y install --no-install-recommends curl libqt5core5a qtscript5-dev libc6 libgcc1 libcanberra-gtk3-0 libcairomm-1.0-1v5 libatkmm-1.6-1v5 libcanberra-gtk3-module libcanberra0 libstdc++6 libgtkmm-3.0-1v5 libglibmm-2.4-1v5 libpangomm-1.4-1v5 libsigc++-2.0-0v5 libqt5network5 rsync cron ssh ssh-askpass sendemail jq libnet-ssleay-perl libio-socket-ssl-perl ttf-wqy-zenhei fonts-wqy-microhei fonts-takao fonts-arphic-uming fonts-noto-cjk && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
