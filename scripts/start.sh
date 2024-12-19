@@ -36,8 +36,13 @@ chown -R ${UID}:${GID} ${DATA_DIR}
 
 echo "---Starting...---"
 term_handler() {
-	kill -SIGTERM "$killpid"
-	wait "$killpid" -f 2>/dev/null
+	if [ "${ROOT}" != "true" ]; then
+		su ${USER} -c 'export DISPLAY=:0; export XAUTHORITY=${DATA_DIR}/.Xauthority; export XDG_RUNTIME_DIR=/tmp/runtime-luckybackup; wmctrl -l | grep "luckyBackup" | awk "{print \$1}" | xargs -I {} wmctrl -ic {}'
+	else
+		export DISPLAY=:0; export XAUTHORITY=${DATA_DIR}/.Xauthority; export XDG_RUNTIME_DIR=/tmp/runtime-luckybackup; wmctrl -l | grep "luckyBackup" | awk "{print \$1}" | xargs -I {} wmctrl -ic {}
+	fi
+	sleep 2
+	tail --pid=$(pidof luckybackup) -f 2>/dev/null
 	exit 143;
 }
 
