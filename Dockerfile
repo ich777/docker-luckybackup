@@ -11,7 +11,9 @@ RUN export TZ=Europe/Rome && \
 	echo "ko_KR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 	echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
-	rm -rf /var/lib/apt/lists/* && \
+	wget -O /tmp/sendemail_1.56-5.2_all.deb http://ftp.de.debian.org/debian/pool/main/s/sendemail/sendemail_1.56-5.2_all.deb && \
+	apt -y install /tmp/sendemail_1.56-5.2_all.deb && \
+	rm -rf /var/lib/apt/lists/* /tmp/sendemail_1.56-5.2_all.deb && \
 	sed -i '/    document.title =/c\    document.title = "luckyBackup - noVNC";' /usr/share/novnc/app/ui.js && \
 	wget -q -O /tmp/luckybackup.tar.gz https://github.com/ich777/luckyBackup/releases/download/0.5.0/luckyBackup-v0.5.0.tar.gz && \
 	tar -C / -xf /tmp/luckybackup.tar.gz && \
